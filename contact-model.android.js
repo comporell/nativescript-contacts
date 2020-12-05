@@ -50,10 +50,16 @@ var Contact = (function (_super) {
         cursor,
         contactFields
     ) {
-        contactFields = contactFields || ['name', 'organization', 'nickname', 'notes', 'photo', 'urls', 'phoneNumbers', 'emailAddresses', 'postalAddresses'];
+        contactFields = contactFields || ['name', 'account', 'organization', 'nickname', 'notes', 'photo', 'urls', 'phoneNumbers', 'emailAddresses', 'postalAddresses'];
         
         var mainCursorJson = helper.convertNativeCursorToJson(cursor);
         this.id = mainCursorJson["_id"];
+
+        if (contactFields.indexOf('account') > -1) {
+            console.log("hello");
+            this.account = "";
+        }
+
 
         if (contactFields.indexOf('photo') > -1 && mainCursorJson[PHOTO_URI]) {
             var bitmap = android.provider.MediaStore.Images.Media.getBitmap(
@@ -251,7 +257,7 @@ var Contact = (function (_super) {
         cObject,
         contactFields
     ) {
-        contactFields = contactFields || ['name', 'organization', 'nickname', 'notes', 'photo', 'urls', 'phoneNumbers', 'emailAddresses', 'postalAddresses'];
+        contactFields = contactFields || ['name', 'account', 'organization', 'nickname', 'notes', 'photo', 'urls', 'phoneNumbers', 'emailAddresses', 'postalAddresses'];
 
         var mainCursorJson = cObject;
 
@@ -352,7 +358,6 @@ var Contact = (function (_super) {
             .withValue(android.provider.ContactsContract.CommonDataKinds.Nickname.NAME, this.nickname)
             .build());
 
-
         // Add Phones
         this.phoneNumbers.forEach(function (item) {
             var nativePhoneType = helper.getNativePhoneType(item.label);
@@ -395,7 +400,6 @@ var Contact = (function (_super) {
         ops.add(helper.getContactBuilder(id, android.provider.ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE)
             .withValue(android.provider.ContactsContract.CommonDataKinds.Note.NOTE, this.notes)
             .build());
-
 
         // Add Websites
         this.urls.forEach(function (item) {
